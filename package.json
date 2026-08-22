@@ -1,0 +1,54 @@
+{
+  "name": "fretwork",
+  "version": "0.2.1",
+  "description": "Local-first time tracking, invoicing, expenses and CRM for your AI agent. No app, no account, nothing phones home.",
+  "license": "MIT",
+  "author": "Ryan Lanciaux",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanlanciaux/fretwork.ai.git"
+  },
+  "homepage": "https://fretwork.ai",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "bin": {
+    "fretwork": "./dist/cli.js",
+    "fretwork-mcp-server": "./dist/mcp.js"
+  },
+  "files": [
+    "dist",
+    "skill",
+    "templates",
+    "AGENT.md"
+  ],
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "dev": "tsx src/cli.ts",
+    "dev:mcp": "tsx src/mcp.ts",
+    "check:dist": "npm run compile && git diff --quiet -- dist || (echo \"dist/ is stale \u2014 run npm run compile and commit it\" && exit 1)",
+    "site": "node site/build.mjs",
+    "site:deploy": "node site/build.mjs && npx --yes wrangler@4 deploy --assets site-dist --name fretwork-mcp-prod --compatibility-date 2026-04-01"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.8.0",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "better-sqlite3": "^12.0.0",
+    "commander": "^12.1.0",
+    "drizzle-orm": "^0.45.2",
+    "mustache": "^4.2.0",
+    "picocolors": "^1.1.0",
+    "puppeteer-core": "^25.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/mustache": "^4.2.0",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.0"
+  }
+}

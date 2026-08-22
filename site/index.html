@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fretwork — Freelance Management for Your AI Agent</title>
+  <meta name="description" content="Open-source invoicing, time tracking, expenses and CRM for the AI agent you already use — Grok Bot, Hermes, OpenClaw, Claude, Cursor. No app, no account, nothing phones home. Your data stays in a local SQLite file." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://fretwork.ai/" />
+  <meta property="og:title" content="Fretwork — Freelance Management for Your AI Agent" />
+  <meta property="og:description" content="Open-source invoicing, time tracking, expenses and CRM for the AI agent you already use. No app, no account, nothing phones home." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@ryanlanciaux" />
+  <meta name="twitter:title" content="Fretwork — Freelance Management for Your AI Agent" />
+  <meta name="twitter:description" content="Open-source invoicing, time tracking, expenses and CRM for the AI agent you already use. No app, no account, nothing phones home." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    /* Additions to the original design: capabilities table, X call-to-action. */
+    .caps-section { max-width: 1040px; margin: 0 auto; padding: 72px 24px 24px; text-align: center; }
+    .caps-sub { color: var(--text-secondary); max-width: 640px; margin: 12px auto 32px; line-height: 1.65; }
+    .caps-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; background: var(--white); text-align: left; }
+    .caps { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.5; }
+    .caps thead th { text-align: left; padding: 12px 16px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--card); }
+    .caps td { padding: 10px 16px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text-secondary); }
+    .caps td:first-child, .caps td:nth-child(2) { white-space: nowrap; }
+    .caps td:last-child { min-width: 260px; }
+    .caps code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12.5px; color: var(--text-primary); }
+    .caps .caps-area th { text-align: left; padding: 14px 16px 6px; font-family: "Cormorant Garamond", Georgia, serif; font-size: 22px; font-weight: 600; color: var(--text-primary); background: var(--card); border-bottom: 1px solid var(--border); }
+    .caps-none { color: var(--text-muted); }
+    .caps-links { margin-top: 18px; color: var(--text-muted); font-size: 14px; }
+    .x-band { max-width: 760px; margin: 64px auto 0; padding: 0 24px; text-align: center; }
+    .x-card { border: 1px solid var(--border); border-radius: 16px; background: var(--card); padding: 32px 24px; }
+    .x-card h2 { font-family: "Cormorant Garamond", Georgia, serif; font-size: 32px; font-weight: 600; margin: 0 0 8px; color: var(--text-primary); }
+    .x-card p { color: var(--text-secondary); margin: 0 0 20px; }
+    .x-glyph { width: 1em; height: 1em; vertical-align: -0.12em; margin: 0 .1em 0 .3em; }
+    .x-cta { display: inline-flex; align-items: center; gap: .4em; font-size: 18px; font-weight: 600; text-decoration: none; color: var(--bg); background: var(--text-primary); border-radius: 999px; padding: 12px 26px; }
+    .x-cta:hover { opacity: .9; }
+    .header-x { display: inline-flex; align-items: center; gap: .3em; }
+    .hero-ctas { flex-direction: column; align-items: center; gap: 18px; }
+    .hero-ctas .install-block { width: min(100%, 760px); text-align: left; }
+    .hero-ctas .btn-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .open-source { display: inline-flex; gap: 8px; align-items: center; }
+
+    /* ---- Mobile ---- */
+    .hero-ctas { width: 100%; min-width: 0; }
+    .hero-ctas .install-block { max-width: 100%; min-width: 0; }
+    .install-block__code { white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; }
+    .header-ctas a { white-space: nowrap; }
+    @media (max-width: 720px) {
+      .header { flex-wrap: wrap; row-gap: 10px; }
+      .header-ctas { width: 100%; justify-content: flex-start; gap: 18px; font-size: 14px; }
+      .hero { padding-left: 20px; padding-right: 20px; }
+      .hero-ctas .btn-row { flex-direction: column; width: 100%; }
+      .hero-ctas .btn-row a { width: 100%; justify-content: center; box-sizing: border-box; }
+      .mcp-section, .caps-section { padding-left: 16px; padding-right: 16px; }
+      /* Table → stacked cards: tool name, CLI line, description. */
+      .caps-wrap { overflow: visible; border: 0; background: transparent; }
+      .caps, .caps tbody, .caps tr, .caps td, .caps th { display: block; }
+      .caps thead { display: none; }
+      .caps tr { border: 1px solid var(--border); border-radius: 12px; background: var(--white); padding: 12px 14px; margin-bottom: 10px; }
+      .caps tr.caps-area { border: 0; background: transparent; padding: 18px 0 4px; margin: 0; }
+      .caps .caps-area th { padding: 0; background: transparent; border: 0; font-size: 24px; }
+      .caps td { padding: 0; border: 0; white-space: normal !important; min-width: 0; }
+      .caps td:first-child code { font-size: 14px; font-weight: 600; }
+      .caps td:nth-child(2) { margin: 6px 0 8px; }
+      .caps td:nth-child(2) code { font-size: 12px; color: var(--text-secondary); word-break: break-word; }
+      .caps td .caps-none { display: none; }
+      .caps td:last-child { font-size: 14px; }
+      .x-band { padding: 0 16px; margin-top: 40px; }
+      .x-card h2 { font-size: 28px; }
+      .footer-links { flex-wrap: wrap; row-gap: 10px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; gap: 14px; }
+    }
+    @media (max-width: 420px) {
+      .hero-heading { font-size: 40px; }
+      .header-ctas { gap: 14px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body data-marker="landing-only" data-page="landing">
+  <header class="header">
+    <a href="/" class="logo" aria-label="fretwork home"> <svg class="logo-icon" viewBox="0 0 2048 2048" fill="currentColor" aria-hidden="true" > <path d="M 1023.99 629.791 C 1028.91 633.67 1039.47 648.36 1043.53 653.92 C 1071.99 692.852 1095.79 731.551 1111.68 777.23 C 1134.29 842.246 1121.76 893.089 1092.92 952.741 C 1119.69 940.225 1156.64 926.718 1185.55 923.465 C 1264.18 914.618 1352.74 976.037 1411.27 1023.12 C 1369.6 1056.3 1334.45 1081.96 1285.81 1103.46 C 1207.53 1138.08 1166.42 1123.03 1092.5 1094.22 C 1105.9 1122.63 1118.22 1151.98 1122.04 1183.54 C 1131.92 1265.27 1073.13 1355.15 1024.98 1416.74 C 995.257 1385.87 956.371 1318.83 940.721 1278 C 912.561 1204.51 924.61 1162.47 955.633 1094.28 C 928.264 1106.32 888.788 1120.41 859.481 1122.75 C 784.367 1128.77 693.097 1070.1 638.031 1023.27 C 692.372 978.622 766.707 927.795 839.515 922.641 C 876.352 920.034 922.143 936.847 955.718 952.601 C 943.986 927.181 928.157 887.292 925.578 859.94 C 918.307 782.835 976.967 687.338 1023.99 629.791z" /> <path d="M 1023.81 904.62 C 1027.91 907.316 1044.14 923.982 1049.36 928.848 C 1081.71 958.998 1110.71 992.154 1141.83 1023.46 C 1103.6 1065.19 1065.72 1102.21 1025.01 1141.34 C 1016.66 1138.78 919.221 1035.88 907.23 1023.5 L 1023.81 904.62 z" fill="var(--bg)" /> <path d="M 970.343 348.639 C 972.012 351.382 978.545 391.526 980.182 398.864 C 990.396 444.647 1000.48 492.371 1014.81 537.007 C 948.832 590.418 891.521 650.361 876.177 737.502 C 864.16 805.75 881.117 861.884 919.722 917.784 C 853.529 871.15 781.665 859.863 704.4 886.161 C 634.373 909.995 581.436 960.794 534.285 1015.71 C 520.872 1012.3 507.521 1008.66 494.236 1004.79 C 442.421 990.99 401.675 979.76 348.795 970.154 C 379.496 953.637 399.837 923.737 424.15 899.161 C 432.213 889.809 441.862 881.521 450.148 872.468 C 527.081 788.414 615.669 740.925 730.57 729.35 C 738.676 616.903 786.53 525.5 870.427 453.081 C 884.667 438.814 899.024 424.544 914.034 411.07 C 935.626 391.687 955.027 373.286 970.343 348.639z" /> <path d="M 1076.8 348.504 C 1083.35 355.696 1088.89 367.992 1096.78 375.114 C 1123.12 398.901 1150.25 428.377 1176.76 451.285 C 1263.37 526.127 1306.54 616.399 1317.37 729.443 C 1416.01 738.744 1495.35 775.692 1568.52 842.656 C 1585.73 858.405 1604.03 879.539 1620.95 896.309 C 1648.26 923.368 1665.27 950.204 1699.22 970.303 C 1648.27 979.64 1607.96 990.342 1558.23 1004.12 L 1514.02 1015.72 C 1411.35 897.402 1279.43 816.845 1129.19 917.992 C 1151.94 884.335 1167.01 854.263 1173.15 813.741 C 1190.52 699.166 1120.39 603.976 1034.55 537.396 C 1050.42 476.871 1067.91 410.107 1076.8 348.504z" /> <path d="M 1513.21 1033.08 C 1520.59 1035.45 1528.55 1037.43 1536.03 1039.54 C 1590.21 1054.86 1644.33 1069.47 1700.23 1076.97 C 1669.66 1093.11 1647.76 1122.69 1624.53 1147.6 C 1530.01 1248.97 1458.28 1302.91 1317.26 1318.55 C 1311.87 1415.37 1267.06 1507.55 1198.96 1575.85 C 1167.66 1607.24 1130.85 1636.83 1100.44 1668.69 C 1090.12 1679.36 1083.06 1687.87 1076.62 1701.16 C 1067.26 1636.6 1049.32 1573.95 1034.83 1510.14 C 1105.61 1451.29 1166.53 1385.02 1174.62 1288.33 C 1179.86 1225.6 1162.34 1178.53 1127.67 1127.74 C 1272.39 1230.27 1414.2 1153.2 1513.21 1033.08z" /> <path d="M 534.791 1034.36 C 536.423 1035.62 545.204 1045.35 547.123 1047.42 C 556.035 1057.14 565.105 1066.72 574.33 1076.15 C 660.579 1163.29 780.947 1210.94 895.572 1143.99 C 903.693 1139.25 911.564 1134.18 919.486 1129.12 C 882.223 1181.22 867.016 1235.07 874.455 1298.98 C 884.686 1386.87 946.13 1457.02 1013.35 1509.8 C 1006.58 1533.08 999.995 1561.49 994.265 1585.18 C 985.405 1621.81 974.853 1664.49 971.515 1701.73 C 964.67 1688.52 958.464 1680.4 948.344 1669.73 C 931.571 1652.41 912.977 1635.97 895.378 1619.46 C 887.504 1612.84 880.525 1604.1 872.845 1597.46 C 787.69 1523.86 739.428 1431.97 730.356 1318.08 C 649.487 1312.19 572.343 1281.75 509.244 1230.82 C 466.15 1195.95 427.703 1150.74 389.34 1110.66 C 375.181 1095.87 366.353 1087.08 348.324 1077.07 C 376.758 1072.86 404.987 1067.37 432.926 1060.61 C 466.115 1052.4 501.798 1041.62 534.791 1034.36z" /> <path d="M 1596.44 1200.69 C 1605.18 1243.37 1626.06 1286 1644.78 1326.02 C 1693.74 1430.65 1742.36 1604.22 1617.72 1676.7 C 1539.07 1722.43 1427.84 1691.84 1349.74 1657.87 C 1299.28 1635.93 1257.93 1610.48 1203.69 1595.55 C 1203.38 1594.02 1223.5 1577.32 1226.76 1574.4 C 1265.84 1539.31 1290.3 1495.69 1309.71 1447.66 C 1326.53 1458.44 1341.88 1470.04 1359.69 1480.75 C 1423.32 1519.04 1478.43 1541.08 1551.26 1553.09 C 1542.23 1471.5 1498.08 1374.7 1451.19 1308.01 C 1508.69 1286.52 1559.02 1249.34 1596.44 1200.69z" /> <path d="M 451.314 1201.63 C 455.781 1205.4 471.744 1225.36 478.67 1232.06 C 516.31 1268.45 549.891 1288.01 597.389 1308.58 C 549.091 1380.99 507.736 1465.52 496.772 1552.77 C 582.816 1543.64 668.886 1496.4 738.356 1447.55 C 758.454 1506.22 795.672 1557.51 845.206 1594.82 C 843.313 1596.57 818.679 1603.91 813.709 1605.7 C 805.045 1608.8 796.514 1612.26 788.136 1616.06 C 708.193 1651.94 643.771 1689 553.397 1698.32 C 443.188 1709.67 358.065 1654.54 352.168 1538.23 C 348.285 1461.63 375.514 1387.29 407.063 1318.5 C 425.874 1277.48 441.273 1246.04 451.314 1201.63z" /> <path d="M 506.073 348.424 C 608.812 340.734 708.378 395.001 798.455 436.157 C 813.257 442.92 830.496 447.288 846.228 451.514 C 790.407 497.599 765.322 532.575 738.886 599.709 C 670.957 552.023 581.073 502.663 496.697 495.608 C 502.547 540.598 513.598 574.291 530.206 616.174 C 548.485 659.807 571.446 701.326 598.685 740.004 C 546.559 757.243 483.502 804.225 451.071 848.406 C 441.895 796.421 422.853 762.39 401.164 714.201 C 360.678 624.244 319.638 493.487 388.224 406.838 C 417.32 370.079 460.276 352.823 506.073 348.424z" /> <path d="M 1505.77 348.416 C 1522.6 346.069 1552.28 348.258 1568 352.055 C 1740.93 393.836 1707.43 587.71 1649.69 709.396 C 1628.89 753.229 1606.88 800.746 1596.47 846.893 C 1566.02 807.779 1533.14 780.617 1489.28 757.53 C 1475.98 750.527 1465.08 744.545 1450.62 739.551 C 1471.38 711.152 1492.8 671.881 1507.57 640.249 C 1529.36 592.309 1544.72 547.72 1551.4 495.591 C 1540.14 496.16 1524.38 499.19 1513.12 501.833 C 1438.9 519.258 1370.93 555.482 1310.11 600.443 C 1289.43 541.504 1252.45 488.504 1201.42 451.951 C 1223.78 445.642 1250.33 438.014 1271.16 427.549 C 1347.08 389.397 1419.37 355.039 1505.77 348.416z" /> </svg><span class="logo-text">Fretwork</span></a>
+    <div class="header-ctas">
+      <a class="link-login" href="/AGENT.md">AGENT.md</a>
+      <a class="link-login" href="https://github.com/ryanlanciaux/fretwork.ai">GitHub</a>
+      <a class="link-login header-x" href="https://x.com/ryanlanciaux">Follow me on <svg class="x-glyph" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <span class="badge">Open source · MIT · Freelance management for your AI agent</span>
+      <h1 class="hero-heading">Track Time. Send Invoices.<br />Keep It Simple.</h1>
+      <p class="hero-sub">
+        Fretwork isn't an app you open. It lives inside the AI agent you already talk to — Grok Bot,
+        Hermes, OpenClaw, Claude, Cursor — and gives it time tracking, invoicing, expenses, and a light
+        CRM. No account, no server, nothing phones home. Your data is one SQLite file on your machine.
+        Paste one line to your agent and it installs everything.
+      </p>
+      <div class="hero-ctas">
+        <div class="install-block">
+          <div class="install-block__bar"><span>Paste to your agent</span><button type="button" class="install-block__copy" id="copy">Copy</button></div>
+          <pre class="install-block__code" id="prompt">Read https://raw.githubusercontent.com/ryanlanciaux/fretwork.ai/refs/heads/main/AGENT.md and follow it to install Fretwork on this machine, set up my database and business profile, and connect it to yourself. Ask me for my business name, billing email, and a logo image file if I have one.</pre>
+        </div>
+        <div class="btn-row">
+          <a class="btn-primary btn-lg" href="https://github.com/ryanlanciaux/fretwork.ai"><span>View the source on GitHub</span></a>
+          <a class="btn-outline btn-lg" href="https://x.com/ryanlanciaux"><span>Follow me on <svg class="x-glyph" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span></a>
+        </div>
+      </div>
+      <p class="trust-text">MIT licensed&nbsp;·&nbsp;Local SQLite, your machine&nbsp;·&nbsp;No accounts, no telemetry</p>
+      <p class="trust-text">Already installed? Tell your agent <em>"upgrade Fretwork"</em> — it re-runs the install (<code>fretwork upgrade</code>). Your data stays put.</p>
+    </section>
+
+    <div class="hero-divider">
+      <span class="band-line"></span>
+      <div class="band-center">
+        <span class="orn-diamond xs"></span><span class="orn-diamond sm-band"></span><span class="orn-diamond md-band"></span><span class="orn-diamond sm-band"></span><span class="orn-diamond xs"></span>
+      </div>
+      <span class="band-line"></span>
+    </div>
+
+    <section class="mcp-section">
+      <span class="badge">How it works</span>
+      <h2 class="mcp-heading">Talk to Your Data</h2>
+      <p class="mcp-sub">
+        Your agent reads <a href="/AGENT.md">AGENT.md</a>, installs Fretwork from
+        <a href="https://github.com/ryanlanciaux/fretwork.ai">GitHub</a> with one <code>npm install</code>,
+        creates your database, and connects itself as an MCP server (Grok Bot, Claude, Cursor, Hermes, OpenClaw,
+        OpenCode, Codex…) — or drives the <code>fretwork</code> CLI, same operations. Then you just talk.
+      </p>
+
+      <div class="chat-window" id="chat">
+        <div class="chat-titlebar"><span class="chat-dot"></span><span class="chat-dot"></span><span class="chat-dot"></span></div>
+        <div class="chat-body">
+          <div class="chat-exchange" style="--delay: 0">
+            <div class="chat-msg chat-user"><p class="chat-text">Show me my invoices</p><span class="chat-time">12:14 AM</span></div>
+            <div class="chat-msg chat-assistant">
+              <div class="chat-thinking">Accessing invoice records…</div>
+              <p class="chat-text">You have one invoice:</p>
+              <table class="chat-table">
+                <thead><tr><th>#</th><th>Client</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+                <tbody><tr><td>INV-2026-001</td><td>Acme Corp</td><td>May 9, 2026</td><td>$1,415.38</td><td class="chat-status-paid">Paid</td></tr></tbody>
+              </table>
+              <p class="chat-text">Want to do anything with it, or create a new one?</p>
+            </div>
+          </div>
+          <div class="chat-exchange" style="--delay: 1">
+            <div class="chat-msg chat-user"><p class="chat-text">Log 4.5 hours for Acme on the redesign</p><span class="chat-time">12:15 AM</span></div>
+            <div class="chat-msg chat-assistant">
+              <div class="chat-thinking">Logging time entry…</div>
+              <p class="chat-text">Logged <strong>4.5 hours</strong> against Acme Corp for May 9. Unbilled total is now <strong>11h</strong>. Want to invoice May yet?</p>
+            </div>
+          </div>
+          <div class="chat-exchange" style="--delay: 2">
+            <div class="chat-msg chat-user"><p class="chat-text">Yeah — invoice Acme for May and render the PDF</p><span class="chat-time">7:43 AM</span></div>
+            <div class="chat-msg chat-assistant">
+              <div class="chat-thinking">Creating invoice and rendering…</div>
+              <p class="chat-text">Created <strong>INV-2026-002</strong> for Acme Corp · 11h × $200/hr + 8.875% tax = <strong>$2,396.13</strong>. PDF saved to <code>~/.fretwork/invoices/INV-2026-002/invoice.pdf</code>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="caps-section" id="capabilities">
+      <span class="badge">Capabilities</span>
+      <h2 class="mcp-heading">Everything It Can Do</h2>
+      <p class="caps-sub">
+        {{TOOL_COUNT}} operations, each available two ways over the same local database: as an <strong>MCP tool</strong>
+        for agents that attach local servers, and as a <strong>CLI command</strong> (every command takes <code>--json</code>).
+        Agents can read the same table as markdown at <a href="/CAPABILITIES.md">/CAPABILITIES.md</a>.
+      </p>
+      <div class="caps-wrap">
+        <table class="caps">
+          <thead><tr><th>MCP tool</th><th>CLI</th><th>What it does</th></tr></thead>
+          <!--CAPABILITIES-->
+        </table>
+      </div>
+      <p class="caps-links">Generated from the source on every build — the table can't drift from the code.</p>
+    </section>
+
+    <section class="x-band">
+      <div class="x-card">
+        <h2>Follow me on <svg class="x-glyph" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></h2>
+        <p>I post what I'm building with Fretwork and the agents it runs in. Questions, bugs, ideas — that's the place.</p>
+        <a class="x-cta" href="https://x.com/ryanlanciaux">@ryanlanciaux</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"> <svg class="footer-logo-icon" viewBox="0 0 2048 2048" fill="currentColor" aria-hidden="true" > <path d="M 1023.99 629.791 C 1028.91 633.67 1039.47 648.36 1043.53 653.92 C 1071.99 692.852 1095.79 731.551 1111.68 777.23 C 1134.29 842.246 1121.76 893.089 1092.92 952.741 C 1119.69 940.225 1156.64 926.718 1185.55 923.465 C 1264.18 914.618 1352.74 976.037 1411.27 1023.12 C 1369.6 1056.3 1334.45 1081.96 1285.81 1103.46 C 1207.53 1138.08 1166.42 1123.03 1092.5 1094.22 C 1105.9 1122.63 1118.22 1151.98 1122.04 1183.54 C 1131.92 1265.27 1073.13 1355.15 1024.98 1416.74 C 995.257 1385.87 956.371 1318.83 940.721 1278 C 912.561 1204.51 924.61 1162.47 955.633 1094.28 C 928.264 1106.32 888.788 1120.41 859.481 1122.75 C 784.367 1128.77 693.097 1070.1 638.031 1023.27 C 692.372 978.622 766.707 927.795 839.515 922.641 C 876.352 920.034 922.143 936.847 955.718 952.601 C 943.986 927.181 928.157 887.292 925.578 859.94 C 918.307 782.835 976.967 687.338 1023.99 629.791z" /> <path d="M 1023.81 904.62 C 1027.91 907.316 1044.14 923.982 1049.36 928.848 C 1081.71 958.998 1110.71 992.154 1141.83 1023.46 C 1103.6 1065.19 1065.72 1102.21 1025.01 1141.34 C 1016.66 1138.78 919.221 1035.88 907.23 1023.5 L 1023.81 904.62 z" fill="var(--bg)" /> <path d="M 970.343 348.639 C 972.012 351.382 978.545 391.526 980.182 398.864 C 990.396 444.647 1000.48 492.371 1014.81 537.007 C 948.832 590.418 891.521 650.361 876.177 737.502 C 864.16 805.75 881.117 861.884 919.722 917.784 C 853.529 871.15 781.665 859.863 704.4 886.161 C 634.373 909.995 581.436 960.794 534.285 1015.71 C 520.872 1012.3 507.521 1008.66 494.236 1004.79 C 442.421 990.99 401.675 979.76 348.795 970.154 C 379.496 953.637 399.837 923.737 424.15 899.161 C 432.213 889.809 441.862 881.521 450.148 872.468 C 527.081 788.414 615.669 740.925 730.57 729.35 C 738.676 616.903 786.53 525.5 870.427 453.081 C 884.667 438.814 899.024 424.544 914.034 411.07 C 935.626 391.687 955.027 373.286 970.343 348.639z" /> <path d="M 1076.8 348.504 C 1083.35 355.696 1088.89 367.992 1096.78 375.114 C 1123.12 398.901 1150.25 428.377 1176.76 451.285 C 1263.37 526.127 1306.54 616.399 1317.37 729.443 C 1416.01 738.744 1495.35 775.692 1568.52 842.656 C 1585.73 858.405 1604.03 879.539 1620.95 896.309 C 1648.26 923.368 1665.27 950.204 1699.22 970.303 C 1648.27 979.64 1607.96 990.342 1558.23 1004.12 L 1514.02 1015.72 C 1411.35 897.402 1279.43 816.845 1129.19 917.992 C 1151.94 884.335 1167.01 854.263 1173.15 813.741 C 1190.52 699.166 1120.39 603.976 1034.55 537.396 C 1050.42 476.871 1067.91 410.107 1076.8 348.504z" /> <path d="M 1513.21 1033.08 C 1520.59 1035.45 1528.55 1037.43 1536.03 1039.54 C 1590.21 1054.86 1644.33 1069.47 1700.23 1076.97 C 1669.66 1093.11 1647.76 1122.69 1624.53 1147.6 C 1530.01 1248.97 1458.28 1302.91 1317.26 1318.55 C 1311.87 1415.37 1267.06 1507.55 1198.96 1575.85 C 1167.66 1607.24 1130.85 1636.83 1100.44 1668.69 C 1090.12 1679.36 1083.06 1687.87 1076.62 1701.16 C 1067.26 1636.6 1049.32 1573.95 1034.83 1510.14 C 1105.61 1451.29 1166.53 1385.02 1174.62 1288.33 C 1179.86 1225.6 1162.34 1178.53 1127.67 1127.74 C 1272.39 1230.27 1414.2 1153.2 1513.21 1033.08z" /> <path d="M 534.791 1034.36 C 536.423 1035.62 545.204 1045.35 547.123 1047.42 C 556.035 1057.14 565.105 1066.72 574.33 1076.15 C 660.579 1163.29 780.947 1210.94 895.572 1143.99 C 903.693 1139.25 911.564 1134.18 919.486 1129.12 C 882.223 1181.22 867.016 1235.07 874.455 1298.98 C 884.686 1386.87 946.13 1457.02 1013.35 1509.8 C 1006.58 1533.08 999.995 1561.49 994.265 1585.18 C 985.405 1621.81 974.853 1664.49 971.515 1701.73 C 964.67 1688.52 958.464 1680.4 948.344 1669.73 C 931.571 1652.41 912.977 1635.97 895.378 1619.46 C 887.504 1612.84 880.525 1604.1 872.845 1597.46 C 787.69 1523.86 739.428 1431.97 730.356 1318.08 C 649.487 1312.19 572.343 1281.75 509.244 1230.82 C 466.15 1195.95 427.703 1150.74 389.34 1110.66 C 375.181 1095.87 366.353 1087.08 348.324 1077.07 C 376.758 1072.86 404.987 1067.37 432.926 1060.61 C 466.115 1052.4 501.798 1041.62 534.791 1034.36z" /> <path d="M 1596.44 1200.69 C 1605.18 1243.37 1626.06 1286 1644.78 1326.02 C 1693.74 1430.65 1742.36 1604.22 1617.72 1676.7 C 1539.07 1722.43 1427.84 1691.84 1349.74 1657.87 C 1299.28 1635.93 1257.93 1610.48 1203.69 1595.55 C 1203.38 1594.02 1223.5 1577.32 1226.76 1574.4 C 1265.84 1539.31 1290.3 1495.69 1309.71 1447.66 C 1326.53 1458.44 1341.88 1470.04 1359.69 1480.75 C 1423.32 1519.04 1478.43 1541.08 1551.26 1553.09 C 1542.23 1471.5 1498.08 1374.7 1451.19 1308.01 C 1508.69 1286.52 1559.02 1249.34 1596.44 1200.69z" /> <path d="M 451.314 1201.63 C 455.781 1205.4 471.744 1225.36 478.67 1232.06 C 516.31 1268.45 549.891 1288.01 597.389 1308.58 C 549.091 1380.99 507.736 1465.52 496.772 1552.77 C 582.816 1543.64 668.886 1496.4 738.356 1447.55 C 758.454 1506.22 795.672 1557.51 845.206 1594.82 C 843.313 1596.57 818.679 1603.91 813.709 1605.7 C 805.045 1608.8 796.514 1612.26 788.136 1616.06 C 708.193 1651.94 643.771 1689 553.397 1698.32 C 443.188 1709.67 358.065 1654.54 352.168 1538.23 C 348.285 1461.63 375.514 1387.29 407.063 1318.5 C 425.874 1277.48 441.273 1246.04 451.314 1201.63z" /> <path d="M 506.073 348.424 C 608.812 340.734 708.378 395.001 798.455 436.157 C 813.257 442.92 830.496 447.288 846.228 451.514 C 790.407 497.599 765.322 532.575 738.886 599.709 C 670.957 552.023 581.073 502.663 496.697 495.608 C 502.547 540.598 513.598 574.291 530.206 616.174 C 548.485 659.807 571.446 701.326 598.685 740.004 C 546.559 757.243 483.502 804.225 451.071 848.406 C 441.895 796.421 422.853 762.39 401.164 714.201 C 360.678 624.244 319.638 493.487 388.224 406.838 C 417.32 370.079 460.276 352.823 506.073 348.424z" /> <path d="M 1505.77 348.416 C 1522.6 346.069 1552.28 348.258 1568 352.055 C 1740.93 393.836 1707.43 587.71 1649.69 709.396 C 1628.89 753.229 1606.88 800.746 1596.47 846.893 C 1566.02 807.779 1533.14 780.617 1489.28 757.53 C 1475.98 750.527 1465.08 744.545 1450.62 739.551 C 1471.38 711.152 1492.8 671.881 1507.57 640.249 C 1529.36 592.309 1544.72 547.72 1551.4 495.591 C 1540.14 496.16 1524.38 499.19 1513.12 501.833 C 1438.9 519.258 1370.93 555.482 1310.11 600.443 C 1289.43 541.504 1252.45 488.504 1201.42 451.951 C 1223.78 445.642 1250.33 438.014 1271.16 427.549 C 1347.08 389.397 1419.37 355.039 1505.77 348.416z" /> </svg><span class="footer-logo-text">Fretwork</span></div>
+        <p class="footer-tagline">Open-source, local-first freelance management — no app, no account, just your AI agent and a SQLite file on your machine.</p>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="/AGENT.md">AGENT.md</a>
+      <a href="/CAPABILITIES.md">Capabilities</a>
+      <a href="/skill/SKILL.md">SKILL.md</a>
+      <a href="https://github.com/ryanlanciaux/fretwork.ai">GitHub</a>
+      <a href="https://github.com/ryanlanciaux/fretwork.ai/blob/main/LICENSE">MIT License</a>
+      <a href="https://x.com/ryanlanciaux">@ryanlanciaux</a>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span class="copyright">MIT licensed. Provided as-is, without warranty — use at your own risk. You are responsible for your invoices, taxes and data, and for what your agent does. No cookies, no analytics.</span>
+      <div class="footer-ornament">
+        <span class="orn-diamond xs"></span><span class="orn-diamond sm-band"></span><span class="orn-diamond md-band"></span><span class="orn-diamond sm-band"></span><span class="orn-diamond xs"></span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("copy").addEventListener("click", async () => {
+      const b = document.getElementById("copy");
+      const pre = document.getElementById("prompt");
+      const text = pre.textContent.trim();
+      let ok = false;
+      // Clipboard API needs a secure context (https / localhost); fall back to
+      // a selection + execCommand elsewhere, and as a last resort select the
+      // text so Ctrl/Cmd+C works.
+      try { if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); ok = true; } } catch {}
+      if (!ok) {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+          document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); document.body.removeChild(ta);
+        } catch {}
+      }
+      if (!ok) {
+        const r = document.createRange(); r.selectNodeContents(pre);
+        const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      }
+      b.textContent = ok ? "Copied" : "Press Ctrl+C";
+      setTimeout(() => (b.textContent = "Copy"), 2000);
+    });
+    const ex = document.querySelectorAll(".chat-exchange");
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } }), { threshold: 0.2 });
+      ex.forEach((el) => io.observe(el));
+    } else ex.forEach((el) => el.classList.add("is-visible"));
+  </script>
+</body>
+</html>

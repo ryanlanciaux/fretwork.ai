@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Invoice {{invoice.number}}</title>
+
+<!--
+  Fretwork invoice template.
+
+  This file lives at ~/.fretwork/templates/invoice.html on your machine.
+  Edit it directly to customize the look of every invoice you generate.
+  Run `fretwork template reset` to restore the bundled default.
+
+  Uses Mustache syntax. The variable index at the bottom of this file
+  enumerates what's available. The --accent CSS var drives the PAID
+  stamp, per-kind dots, and any other tinted element.
+-->
+
+<!-- CUSTOM INSTRUCTIONS (from your config):
+{{#customInstructions}}{{customInstructions}}{{/customInstructions}}{{^customInstructions}}(none — set with `fretwork config set --custom-instructions "..."`){{/customInstructions}}
+-->
+
+<!-- Rendering is offline by design: no web fonts. The stacks below fall back to system fonts. -->
+
+<style>
+  :root {
+    --accent: {{invoice.accent}};
+    --accent-soft: {{invoice.accentSoft}};
+    --inv-bg: #fff;
+    --inv-fg: oklch(0.16 0.01 220);
+    --inv-muted: oklch(0.45 0.01 220);
+    --inv-faint: oklch(0.50 0.01 220);
+    --inv-hairline: oklch(0.92 0.005 220);
+    --inv-divider: oklch(0.95 0.005 220);
+    --inv-totals-bg: oklch(0.97 0.003 220);
+  }
+
+  html, body { margin: 0; padding: 0; background: var(--inv-bg); }
+  body {
+    font-family: "IBM Plex Sans", "Inter", system-ui, -apple-system, sans-serif;
+    color: var(--inv-fg);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  body, .inv, .inv * { box-sizing: border-box; }
+
+  .num {
+    font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .micro {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--inv-muted);
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--inv-hairline);
+    border-radius: 8px;
+  }
+
+  .inv {
+    width: 760px;
+    min-height: 1000px;
+    padding: 48px 56px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand__logo { width: 24px; height: 24px; flex-shrink: 0; display: block; }
+  .brand__logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .brand__name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .brand__tagline { font-size: 11px; color: var(--inv-faint); margin-top: 1px; }
+
+  .doc { text-align: right; }
+  .doc__number { font-size: 14px; margin-top: 2px; font-weight: 500; }
+  .pill {
+    margin-top: 6px;
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+
+  /* Hero card */
+  .hero { margin-top: 28px; padding: 28px 32px; position: relative; overflow: hidden; }
+  .hero__client { margin-top: 6px; font-size: 22px; font-weight: 600; letter-spacing: -0.015em; }
+  .hero__project { color: var(--inv-muted); margin-top: 2px; }
+  .hero__meta {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .hero__big { font-size: 22px; font-weight: 600; margin-top: 4px; }
+  .hero__small { font-size: 14px; font-weight: 400; margin-top: 6px; }
+
+  .paid-stamp {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 4px 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    font-size: 11px;
+    transform: rotate(-6deg);
+  }
+
+  /* From / To */
+  .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px; }
+  .parties__name { margin-top: 8px; font-weight: 500; }
+  .parties__lines { color: var(--inv-muted); }
+
+  /* Line items */
+  .items { margin-top: 28px; }
+  .items__head {
+    display: grid;
+    grid-template-columns: 1fr 110px 110px 120px;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--inv-hairline);
+  }
+  .items__head.no-qty { grid-template-columns: 1fr 120px; }
+  .items__row {
+    display: grid;
+    grid-template-columns: 1fr 110px 110px 120px;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--inv-divider);
+    align-items: baseline;
+  }
+  .items__row.no-qty { grid-template-columns: 1fr 120px; }
+  .items__row:last-of-type { border-bottom: none; }
+  .items__desc { display: flex; align-items: center; gap: 8px; }
+  .items__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .items__title { font-weight: 500; }
+  .items__sub { margin-left: 14px; margin-top: 3px; color: var(--inv-faint); font-size: 12px; }
+  .items__qty,
+  .items__rate { text-align: right; color: var(--inv-muted); }
+  .items__amount { text-align: right; font-weight: 600; }
+  .right { text-align: right; }
+
+  /* Totals — sits inside the items card */
+  .totals {
+    padding: 16px 20px;
+    background: var(--inv-totals-bg);
+    border-top: 1px solid var(--inv-hairline);
+  }
+  .totals__row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 13px;
+  }
+  .totals__label { color: var(--inv-muted); }
+  .totals__grand {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--inv-hairline);
+    margin-top: 6px;
+    align-items: baseline;
+    font-weight: 600;
+  }
+  .totals__grand-amt { font-size: 16px; }
+
+  /* Notes + footer */
+  .notes { margin-top: 28px; color: oklch(0.40 0.01 220); font-size: 12px; line-height: 1.65; }
+  .foot {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--inv-hairline);
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="inv">
+
+  <!-- ────── Header ────── -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand__logo">{{{issuer.logoHtml}}}</div>
+      <div>
+        <div class="brand__name">{{issuer.name}}</div>
+        {{#issuer.tagline}}<div class="brand__tagline">{{issuer.tagline}}</div>{{/issuer.tagline}}
+      </div>
+    </div>
+    <div class="doc">
+      <div class="micro">{{invoice.docLabel}}</div>
+      <div class="doc__number num">{{invoice.number}}</div>
+      {{#invoice.showStatusPill}}
+        <div class="pill" style="background: {{invoice.statusBg}}; color: {{invoice.statusFg}};">
+          {{invoice.statusLabel}}
+        </div>
+      {{/invoice.showStatusPill}}
+    </div>
+  </div>
+
+  <!-- ────── Hero card ────── -->
+  <div class="card hero">
+    {{#paid}}<div class="paid-stamp">PAID</div>{{/paid}}
+
+    <div class="micro">{{invoice.heroLabel}}</div>
+    <div class="hero__client">{{client.name}}</div>
+    {{#invoice.project}}<div class="hero__project">{{invoice.project}}</div>{{/invoice.project}}
+
+    <div class="hero__meta">
+      {{#invoice.heroMeta}}
+        <div>
+          <div class="micro">{{label}}</div>
+          <div class="num {{#big}}hero__big{{/big}}{{^big}}hero__small{{/big}}">{{value}}</div>
+        </div>
+      {{/invoice.heroMeta}}
+    </div>
+  </div>
+
+  <!-- ────── From / To ────── -->
+  <div class="parties">
+    <div>
+      <div class="micro">From</div>
+      <div class="parties__name">{{issuer.name}}</div>
+      <div class="parties__lines">
+        {{#issuer.addressLines}}{{.}}<br/>{{/issuer.addressLines}}
+        {{#issuer.email}}{{issuer.email}}{{/issuer.email}}
+      </div>
+    </div>
+    <div>
+      <div class="micro">To</div>
+      <div class="parties__name">{{client.name}}</div>
+      <div class="parties__lines">
+        {{#client.contact}}{{client.contact}}<br/>{{/client.contact}}
+        {{#client.addressLines}}{{.}}<br/>{{/client.addressLines}}
+      </div>
+    </div>
+  </div>
+
+  <!-- ────── Line items ────── -->
+  <div class="card items">
+
+    <div class="items__head{{^invoice.hasMeaningfulQty}} no-qty{{/invoice.hasMeaningfulQty}} micro">
+      <div>Item</div>
+      {{#invoice.hasMeaningfulQty}}<div class="right">Qty</div>{{/invoice.hasMeaningfulQty}}
+      {{#invoice.hasMeaningfulQty}}<div class="right">Rate</div>{{/invoice.hasMeaningfulQty}}
+      <div class="right">Amount</div>
+    </div>
+
+    {{#invoice.items}}
+      <div class="items__row{{^hasMeaningfulQty}} no-qty{{/hasMeaningfulQty}}">
+        <div>
+          <div class="items__desc">
+            <div class="items__dot" style="background: {{dotColor}};"></div>
+            <div class="items__title">{{desc}}</div>
+          </div>
+          {{#sub}}<div class="items__sub">{{sub}}</div>{{/sub}}
+        </div>
+        {{#hasMeaningfulQty}}<div class="items__qty num">{{qtyFmt}}</div>{{/hasMeaningfulQty}}
+        {{#hasMeaningfulQty}}<div class="items__rate num">{{rateFmt}}</div>{{/hasMeaningfulQty}}
+        <div class="items__amount num">{{amountFmt}}</div>
+      </div>
+    {{/invoice.items}}
+
+    <!-- Totals -->
+    <div class="totals">
+      <div class="totals__row">
+        <span class="totals__label">Subtotal</span>
+        <span class="num">{{invoice.subtotalFmt}}</span>
+      </div>
+      {{#invoice.hasTax}}
+        <div class="totals__row">
+          <span class="totals__label">Tax{{#invoice.taxLabel}} ({{invoice.taxLabel}}){{/invoice.taxLabel}}</span>
+          <span class="num">{{invoice.taxFmt}}</span>
+        </div>
+      {{/invoice.hasTax}}
+      <div class="totals__grand">
+        <span>{{invoice.totalLabel}}</span>
+        <span class="totals__grand-amt num">{{invoice.totalFmt}}</span>
+      </div>
+      {{#invoice.partiallyPaid}}
+        <div class="totals__row">
+          <span class="totals__label">Amount paid</span>
+          <span class="num">−{{invoice.amountPaidFmt}}</span>
+        </div>
+        <div class="totals__grand">
+          <span>Balance due</span>
+          <span class="totals__grand-amt num">{{invoice.balanceDueFmt}}</span>
+        </div>
+      {{/invoice.partiallyPaid}}
+    </div>
+
+  </div>
+
+  <!-- ────── Notes ────── -->
+  {{#invoice.notes}}<div class="notes">{{invoice.notes}}</div>{{/invoice.notes}}
+
+  <!-- ────── Footer ────── -->
+  <div class="foot micro">
+    <span>{{issuer.site}}</span>
+    <span>{{#issuer.email}}Questions? {{issuer.email}}{{/issuer.email}}</span>
+  </div>
+
+</div>
+
+<!--
+  Variables this template can use:
+
+    paid                                    — true when status is "paid"
+
+    issuer.name, issuer.tagline,
+    issuer.email, issuer.site,
+    issuer.addressLines (array of strings)
+    issuer.logoHtml (raw HTML/SVG)
+
+    client.name, client.contact,
+    client.addressLines (array of strings)
+
+    invoice.number, invoice.docLabel,       — "Receipt" or "Invoice"
+    invoice.heroLabel,                       — "Receipt for" or "Billed to"
+    invoice.totalLabel,                      — "Total charged" or "Total due"
+    invoice.project,
+    invoice.accent, invoice.accentSoft,
+    invoice.showStatusPill, invoice.statusBg, invoice.statusFg, invoice.statusLabel,
+    invoice.heroMeta (array: { label, value, big })
+    invoice.hasMeaningfulQty,
+    invoice.items (array: { desc, sub, qtyFmt, rateFmt, amountFmt, dotColor, _hasQty })
+    invoice.hasTax, invoice.taxLabel, invoice.taxFmt,
+    invoice.subtotalFmt, invoice.totalFmt,
+    invoice.partiallyPaid,                   — true when 0 < amountPaid < total
+    invoice.amountPaidFmt, invoice.balanceDueFmt,
+    invoice.notes,
+
+    customInstructions                       — free-form text from `fretwork config`
+-->
+
+</body>
+</html>
